@@ -1,0 +1,39 @@
+Q1:
+
+
+Q2: Solution for transmitting only to the sink:
+
+If the node that i meet is the sink i transmit my data, if not, i do nothing.
+	private boolean doWeTransmitToNode(Node node)
+	{
+		if (node.hasProperty("sink")) return (true);
+		return (false);
+	}
+
+
+Q3: A better solution:
+
+//Send the data to a node that is closer to the sink
+
+	private boolean doWeTransmitToNode(Node node)
+	{
+		if (this.distance(0,0)>node.distance(300,300)) return (true);
+		return (false);
+	}
+
+
+Q4: Using the property 'distanceToSink' to improve the data aggregation time:
+
+//This property is defined in the AdvisedWayPointNode class, so we need first to create an instance of this class on the main method and not an instance of WayPointNode class.
+//On the AdvisedWayPointNode, the node make a list of successive random destinations. So, the node knows the distance that he will travell to meet the sink because he knows also the position of the sink.
+//To improve the aggregation time, we use this property on the doWeTransmitToNode method by considering the node that will travel the longest disrance to meet the sink sending his data to the other node that he will meet.
+//And of course, if the node meets the sink, he will send its data to it.
+
+	private boolean doWeTransmitToNode(Node node)
+	{
+		if (node.hasProperty("sink")) return true;
+		return (double) node.getProperty("distanceToSink") < this.distanceToSink;
+	}
+Q5: Improvement of the algorithm:
+
+//To improve this algorithm, we let a node to transmit more than one transmission because we can meet a node that has already sent data and will meet the sink soon and it will be cool if we can if we make benefits from this situation. But because a node has a limited energy, it can't transmit every time. For that, we can introduce a property to specify the number of transmissions that a node can make and we call it 'numTransAllowed'.
